@@ -18,6 +18,11 @@ using Microsoft.Xna.Framework.Input.Touch;
 using RenderingLibrary;
 using RenderingLibrary.Content;
 using RenderingLibrary.Graphics;
+using Vector2 = System.Numerics.Vector2;
+using Color = System.Drawing.Color;
+using Rectangle = System.Drawing.Rectangle;
+using Matrix = System.Numerics.Matrix4x4;
+
 namespace MonoGameGum.Input;
 #endif
 

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using MathHelper = ToolsUtilitiesStandard.Helpers.MathHelper;
 using Vector2 = System.Numerics.Vector2;
+using Vector3 = System.Numerics.Vector3;
 using Color = System.Drawing.Color;
 using Rectangle = System.Drawing.Rectangle;
 using Matrix = System.Numerics.Matrix4x4;
@@ -37,7 +38,7 @@ public class SpriteRenderer
     BasicEffect basicEffect;
 
     // This is used by GumBatch to force a matrix for all calls in its own Begin/End pair
-    public Microsoft.Xna.Framework.Matrix? ForcedMatrix { get; set; }
+    public Matrix? ForcedMatrix { get; set; }
 
     public IEnumerable<BeginParameters> LastFrameDrawStates
     {
@@ -81,15 +82,15 @@ public class SpriteRenderer
             ? GetZoomMatrixFromLayerCameraSettings()
             : GetZoomAndMatrix(layer, camera);
 
-        Microsoft.Xna.Framework.Matrix GetZoomMatrixFromLayerCameraSettings()
+        Matrix GetZoomMatrixFromLayerCameraSettings()
         {
             if(layer.LayerCameraSettings?.Zoom != null)
             {
-                return Microsoft.Xna.Framework.Matrix.CreateScale(layer.LayerCameraSettings.Zoom.Value);
+                return Matrix.CreateScale(layer.LayerCameraSettings.Zoom.Value);
             }
             else
             {
-                return Microsoft.Xna.Framework.Matrix.Identity;
+                return Matrix.Identity;
             }
         }
 
@@ -136,13 +137,13 @@ public class SpriteRenderer
         {
             var effectManager = Renderer.CustomEffectManager;
 
-            var projection = Microsoft.Xna.Framework.Matrix.CreateOrthographic(width, -height, -1, 1);
+            var projection = Matrix.CreateOrthographic(width, -height, -1, 1);
             var view = GetZoomAndMatrix(layer, camera);
 
             if (camera.CameraCenterOnScreen == CameraCenterOnScreen.TopLeft || 
                 layer.LayerCameraSettings?.IsInScreenSpace == true)
             {
-                view *= Microsoft.Xna.Framework.Matrix.CreateTranslation(-camera.ClientWidth / 2.0f, -camera.ClientHeight / 2.0f, 0);
+                view *= Matrix.CreateTranslation(-camera.ClientWidth / 2.0f, -camera.ClientHeight / 2.0f, 0);
             }
 
             effectManager.ParameterViewProj.SetValue(view * projection);
@@ -182,10 +183,10 @@ public class SpriteRenderer
             //    }
             //}
 
-            basicEffect.World = ForcedMatrix ?? Microsoft.Xna.Framework.Matrix.Identity;
+            basicEffect.World = ForcedMatrix ?? Matrix.Identity;
 
             //effect.Projection = Matrix.CreateOrthographic(100, 100, 0.0001f, 1000);
-            basicEffect.Projection = Microsoft.Xna.Framework.Matrix.CreateOrthographic(
+            basicEffect.Projection = Matrix.CreateOrthographic(
                 width,
                 -height,
                 -1, 1);
@@ -196,7 +197,7 @@ public class SpriteRenderer
                 layer.LayerCameraSettings?.IsInScreenSpace == true;
             if(shouldOffset)
             {
-                basicEffect.View *= Microsoft.Xna.Framework.Matrix.CreateTranslation(-camera.ClientWidth / 2.0f, -camera.ClientHeight / 2.0f, 0);
+                basicEffect.View *= Matrix.CreateTranslation(-camera.ClientWidth / 2.0f, -camera.ClientHeight / 2.0f, 0);
             }
 
             effectiveEffect = basicEffect;
@@ -258,9 +259,9 @@ public class SpriteRenderer
     }
 
 
-    private Microsoft.Xna.Framework.Matrix GetZoomAndMatrix(Layer layer, Camera camera)
+    private Matrix GetZoomAndMatrix(Layer layer, Camera camera)
     {
-        Microsoft.Xna.Framework.Matrix matrix;
+        Matrix matrix;
 
         if (layer.LayerCameraSettings != null)
         {
@@ -310,11 +311,11 @@ public class SpriteRenderer
                 zoom, 
                 camera.ClientWidth, 
                 camera.ClientHeight, 
-                forRendering:true).ToXNA();
+                forRendering:true);
         }
         else
         {
-            matrix = camera.GetTransformationMatrix(forRendering:true).ToXNA();
+            matrix = camera.GetTransformationMatrix(forRendering:true);
             CurrentZoom = camera.Zoom;
         }
         return matrix;
@@ -426,7 +427,7 @@ public class SpriteRenderer
 
         if (!Renderer.UseCustomEffectRendering && Renderer.UseBasicEffectRendering && basicEffect.FogEnabled)
         {
-            basicEffect.FogColor = new Microsoft.Xna.Framework.Vector3(color.R/255, color.G/255, color.B/255f);
+            basicEffect.FogColor = new Vector3(color.R/255, color.G/255, color.B/255f);
         }
 
         var quarterRotations = System.Math.Abs(rotation / MathHelper.PiOver2);

@@ -148,6 +148,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\MonoGame\MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj" />
 		<ProjectReference Include="..\GumCommon\GumCommon.csproj" />
 	</ItemGroup>
 
@@ -160,9 +161,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.4.1">
-			<PrivateAssets>All</PrivateAssets>
-		</PackageReference>
 		
 		
 		<PackageReference Include="TextCopy" Version="6.2.1" Condition="!$(TargetFramework.Contains('ios'))" />
