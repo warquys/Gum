@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using BlendState = Gum.BlendState;
 using Color = System.Drawing.Color;
+using Vector2 = System.Numerics.Vector2;
 using Rectangle = System.Drawing.Rectangle;
-using Gum;
-using System.Reflection.Emit;
-using Microsoft.Xna.Framework;
-using System.Linq;
-using RenderingLibrary.Math.Geometry;
-using Gum.Wireframe;
+using Matrix = System.Numerics.Matrix4x4;
 
 namespace RenderingLibrary.Graphics;
 
@@ -460,7 +457,7 @@ public class Renderer : IRenderer
 
 
     // Immediate mode calls:
-    public void Begin(Microsoft.Xna.Framework.Matrix? spriteBatchMatrix = null)
+    public void Begin(Matrix? spriteBatchMatrix = null)
     {
         SpriteBatchStack.PerformStartOfLayerRenderingLogic();
         spriteRenderer.ForcedMatrix = spriteBatchMatrix;
@@ -961,7 +958,7 @@ public class GumBatch
         systemManagers.Renderer.Begin(spriteBatchMatrix);
     }
 
-    public void DrawString(BitmapFont font, string text, Microsoft.Xna.Framework.Vector2 position, Microsoft.Xna.Framework.Color color)
+    public void DrawString(BitmapFont font, string text, Vector2 position, Microsoft.Xna.Framework.Color color)
     {
         if (State == GumBatchState.NotRendering)
         {
