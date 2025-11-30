@@ -29,7 +29,7 @@ namespace MonoGameGum;
 public class GumService
 {
     #region Default
-    static GumService _default;
+    static GumService? _default;
     public static GumService Default
     {
         get

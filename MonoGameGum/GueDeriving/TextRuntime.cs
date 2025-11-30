@@ -53,26 +53,26 @@ public class TextRuntime : InteractiveGue
 
     public int Red
     {
-        get => mContainedText.Red;
-        set => mContainedText.Red = value;
+        get => ContainedText.Red;
+        set => ContainedText.Red = value;
     }
 
     public int Green
     {
-        get => mContainedText.Green;
-        set => mContainedText.Green = value;
+        get => ContainedText.Green;
+        set => ContainedText.Green = value;
     }
 
     public int Blue
     {
-        get => mContainedText.Blue;
-        set => mContainedText.Blue = value;
+        get => ContainedText.Blue;
+        set => ContainedText.Blue = value;
     }
 
     public int Alpha
     {
-        get => mContainedText.Alpha;
-        set => mContainedText.Alpha = value;
+        get => ContainedText.Alpha;
+        set => ContainedText.Alpha = value;
     }
 
 

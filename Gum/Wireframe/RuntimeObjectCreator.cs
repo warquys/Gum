@@ -13,10 +13,10 @@ namespace Gum.Wireframe
     public static class RuntimeObjectCreator
     {
 
-        public static IRenderable TryHandleAsBaseType(string baseType, ISystemManagers managers)
+        public static IRenderable? TryHandleAsBaseType(string baseType, ISystemManagers managers)
         {
             var systemManagers = managers as SystemManagers;
-            IRenderable containedObject = null;
+            IRenderable? containedObject = null;
             switch (baseType)
             {
 #if MONOGAME || KNI || FNA
@@ -68,9 +68,7 @@ namespace Gum.Wireframe
                     containedObject = solidRectangle;
                     break;
                 case "Sprite":
-                    Texture2D texture = null;
-
-                    Sprite sprite = new Sprite(texture);
+                    Sprite sprite = new Sprite(null);
                     containedObject = sprite;
 
                     break;
