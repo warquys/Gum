@@ -8,5 +8,5 @@ namespace MonoGameGum.Localization;
 public interface ILocalizationService
 {
     int CurrentLanguage { get; set; }
-    string Translate(string stringId);
+    string Translate(string? stringId);
 }

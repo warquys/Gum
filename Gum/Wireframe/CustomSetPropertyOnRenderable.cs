@@ -87,10 +87,8 @@ public class CustomSetPropertyOnRenderable
         {
             handled = TrySetPropertyOnLinePolygon(renderableIpso, propertyName, value);
         }
-        else if (renderableIpso is SolidRectangle)
+        else if (renderableIpso is SolidRectangle solidRect)
         {
-            var solidRect = renderableIpso as SolidRectangle;
-
             if (propertyName == "Blend")
             {
                 var valueAsGumBlend = (RenderingLibrary.Blend)value;
@@ -170,7 +168,7 @@ public class CustomSetPropertyOnRenderable
             }
             else
             {
-                System.Reflection.PropertyInfo propertyInfo = renderableIpso.GetType().GetProperty(propertyName);
+                System.Reflection.PropertyInfo? propertyInfo = renderableIpso.GetType().GetProperty(propertyName);
 
                 if (propertyInfo != null && propertyInfo.CanWrite)
                 {
@@ -194,17 +192,20 @@ public class CustomSetPropertyOnRenderable
 
     private static bool TrySetPropertyOnInvisbileRenderable(IRenderableIpso renderableIpso, string propertyName, object value, bool handled)
     {
+        if (renderableIpso is not InvisibleRenderable invisibleRenderable)
+            return false;
+
         bool didSet = false;
         switch (propertyName)
         {
             case "IsRenderTarget":
-                (renderableIpso as InvisibleRenderable).IsRenderTarget = value as bool? ?? false;
+                invisibleRenderable.IsRenderTarget = value as bool? ?? false;
                 didSet = true;
                 break;
             case "Alpha":
                 if(value is int asInt)
                 {
-                    (renderableIpso as InvisibleRenderable).Alpha = asInt;
+                    invisibleRenderable.Alpha = asInt;
                 }
                 else if(value is float asFloat)
                 {
@@ -212,7 +213,7 @@ public class CustomSetPropertyOnRenderable
                 }
                 else
                 {
-                    (renderableIpso as InvisibleRenderable).Alpha = 255;
+                    invisibleRenderable.Alpha = value as float? ?? 255;
                 }
                 didSet = true;
                 break;
@@ -223,7 +224,8 @@ public class CustomSetPropertyOnRenderable
 
     private static bool TrySetPropertyOnNineSlice(IRenderableIpso renderableIpso, GraphicalUiElement graphicalUiElement, string propertyName, object value, bool handled)
     {
-        var nineSlice = renderableIpso as NineSlice;
+        if (renderableIpso is not NineSlice nineSlice)
+            return false;
 
         if (propertyName == "SourceFile")
         {
@@ -293,7 +295,7 @@ public class CustomSetPropertyOnRenderable
             return handled;
     }
 
-    private static void AssignSourceFileOnNineSlice(string value, GraphicalUiElement graphicalUiElement, NineSlice nineSlice)
+    private static void AssignSourceFileOnNineSlice(string? value, GraphicalUiElement graphicalUiElement, NineSlice nineSlice)
     {
         var loaderManager = global::RenderingLibrary.Content.LoaderManager.Self;
 
@@ -346,7 +348,7 @@ public class CustomSetPropertyOnRenderable
                         texture =
                             loaderManager.LoadContent<Microsoft.Xna.Framework.Graphics.Texture2D>(value);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         if (GraphicalUiElement.MissingFileBehavior == MissingFileBehavior.ThrowException)
                         {
@@ -365,12 +367,12 @@ public class CustomSetPropertyOnRenderable
     private static bool TrySetPropertyOnSprite(IRenderableIpso renderableIpso, GraphicalUiElement graphicalUiElement, string propertyName, object value)
     {
         bool handled = false;
-        var sprite = renderableIpso as Sprite;
+        if (renderableIpso is not Sprite sprite)
+            return false;
 
         if (propertyName == "SourceFile")
         {
-            var asString = value as String;
-            handled = AssignSourceFileOnSprite(sprite, graphicalUiElement, asString);
+            handled = AssignSourceFileOnSprite(sprite, graphicalUiElement, value as String);
 
         }
         else if (propertyName == nameof(Sprite.Alpha))
@@ -613,8 +615,12 @@ public class CustomSetPropertyOnRenderable
 
             var valueAsXnaBlend = valueAsGumBlend.ToBlendState();
 
-            textRenderable.BlendState = valueAsXnaBlend;
-            handled = true;
+            if (mContainedObjectAsIpso is Text text && value is RenderingLibrary.Blend valueAsGumBlend)
+            {
+                var valueAsXnaBlend = valueAsGumBlend.ToBlendState();
+                text.BlendState = valueAsXnaBlend;
+                handled = true;
+            }
 #endif
         }
         else if (propertyName == "Alpha")
@@ -1140,7 +1146,7 @@ public class CustomSetPropertyOnRenderable
         }
     }
 
-    public static void UpdateToFontValues(IText text, GraphicalUiElement graphicalUiElement)
+    public static void UpdateToFontValues(IText? text, GraphicalUiElement graphicalUiElement)
     {
         // January 28, 2025
         // If we early-out here,
@@ -1567,7 +1573,7 @@ public class CustomSetPropertyOnRenderable
         return handled;
     }
 
-    public static bool AssignSourceFileOnSprite(Sprite sprite, GraphicalUiElement graphicalUiElement, string value)
+    public static bool AssignSourceFileOnSprite(Sprite sprite, GraphicalUiElement graphicalUiElement, string? value)
     {
         bool handled;
 
@@ -1713,39 +1719,42 @@ public class CustomSetPropertyOnRenderable
 
     public static void AddRenderableToManagers(IRenderableIpso renderable, ISystemManagers iSystemManagers, Layer layer)
     {
-        var managers = iSystemManagers as SystemManagers;
+        var managers = iSystemManagers as SystemManagers; // 🤡
 
-        if (renderable is Sprite)
+        if (managers == null)
+            throw new Exception("Only support SystemMangers");
+
+        if (renderable is Sprite sprite)
         {
-            managers.SpriteManager.Add(renderable as Sprite, layer);
+            managers.SpriteManager.Add(sprite, layer);
         }
-        else if (renderable is NineSlice)
+        else if (renderable is NineSlice nineSlice)
         {
-            managers.SpriteManager.Add(renderable as NineSlice, layer);
+            managers.SpriteManager.Add(nineSlice, layer);
         }
-        else if (renderable is LineRectangle)
+        else if (renderable is LineRectangle lineRectangle)
         {
-            managers.ShapeManager.Add(renderable as LineRectangle, layer);
+            managers.ShapeManager.Add(lineRectangle, layer);
         }
-        else if (renderable is SolidRectangle)
+        else if (renderable is SolidRectangle solidRectangle)
         {
-            managers.ShapeManager.Add(renderable as SolidRectangle, layer);
+            managers.ShapeManager.Add(solidRectangle, layer);
         }
-        else if (renderable is Text)
+        else if (renderable is Text text)
         {
-            managers.TextManager.Add(renderable as Text, layer);
+            managers.TextManager.Add(text, layer);
         }
-        else if (renderable is LineCircle)
+        else if (renderable is LineCircle lineCircle)
         {
-            managers.ShapeManager.Add(renderable as LineCircle, layer);
+            managers.ShapeManager.Add(lineCircle, layer);
         }
-        else if (renderable is LinePolygon)
+        else if (renderable is LinePolygon linePolygon)
         {
-            managers.ShapeManager.Add(renderable as LinePolygon, layer);
+            managers.ShapeManager.Add(linePolygon, layer);
         }
-        else if (renderable is InvisibleRenderable)
+        else if (renderable is InvisibleRenderable invisibleRenderable)
         {
-            managers.SpriteManager.Add(renderable as InvisibleRenderable, layer);
+            managers.SpriteManager.Add(invisibleRenderable, layer);
         }
         else
         {
@@ -1762,7 +1771,10 @@ public class CustomSetPropertyOnRenderable
 
     public static void RemoveRenderableFromManagers(IRenderableIpso renderable, ISystemManagers iSystemManagers)
     {
-        var managers = (SystemManagers)iSystemManagers;
+        var managers = iSystemManagers as SystemManagers; // 🤡
+
+        if (managers == null)
+            throw new Exception("Only support SystemMangers");
 
         if (renderable is Sprite asSprite)
         {

@@ -73,8 +73,8 @@ public class TextRuntime : InteractiveGue
     /// </summary>
     public int Red
     {
-        get => mContainedText.Red;
-        set => mContainedText.Red = value;
+        get => ContainedText.Red;
+        set => ContainedText.Red = value;
     }
 
     /// <summary>
@@ -82,8 +82,8 @@ public class TextRuntime : InteractiveGue
     /// </summary>
     public int Green
     {
-        get => mContainedText.Green;
-        set => mContainedText.Green = value;
+        get => ContainedText.Green;
+        set => ContainedText.Green = value;
     }
 
     /// <summary>
@@ -91,8 +91,8 @@ public class TextRuntime : InteractiveGue
     /// </summary>
     public int Blue
     {
-        get => mContainedText.Blue;
-        set => mContainedText.Blue = value;
+        get => ContainedText.Blue;
+        set => ContainedText.Blue = value;
     }
 
     /// <summary>
@@ -100,8 +100,8 @@ public class TextRuntime : InteractiveGue
     /// </summary>
     public int Alpha
     {
-        get => mContainedText.Alpha;
-        set => mContainedText.Alpha = value;
+        get => ContainedText.Alpha;
+        set => ContainedText.Alpha = value;
     }
 
     /// <summary>

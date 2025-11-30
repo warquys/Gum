@@ -342,7 +342,7 @@ public class Text : SpriteBatchRenderableBase, IRenderableIpso, IVisible, IWrapp
     /// This only exists to make it easier for the code that creates InlineVariables
     /// to use this.
     /// </summary>
-    public string StoredMarkupText { get; set; }
+    public string? StoredMarkupText { get; set; }
 
     public List<string> WrappedText => mWrappedText;
 
