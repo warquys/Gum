@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace MonoGameGum.Forms
 {
+    // Tmp removing the ObsoleteAttribute until the generator target the right class
 
 
     [Obsolete(" Gum.Forms.DefaultVisualsVersion instead", error:true)]
