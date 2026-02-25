@@ -209,11 +209,11 @@ public class CustomSetPropertyOnRenderable
                 }
                 else if(value is float asFloat)
                 {
-                    (renderableIpso as InvisibleRenderable).Alpha = (int)asFloat;
+                    invisibleRenderable.Alpha = (int)asFloat;
                 }
                 else
                 {
-                    invisibleRenderable.Alpha = value as float? ?? 255;
+                    invisibleRenderable.Alpha = value as int? ?? 255;
                 }
                 didSet = true;
                 break;
@@ -612,15 +612,9 @@ public class CustomSetPropertyOnRenderable
         {
 #if XNALIKE
             var valueAsGumBlend = (RenderingLibrary.Blend)value;
-
             var valueAsXnaBlend = valueAsGumBlend.ToBlendState();
-
-            if (mContainedObjectAsIpso is Text text && value is RenderingLibrary.Blend valueAsGumBlend)
-            {
-                var valueAsXnaBlend = valueAsGumBlend.ToBlendState();
-                text.BlendState = valueAsXnaBlend;
-                handled = true;
-            }
+            textRenderable.BlendState = valueAsXnaBlend;
+            handled = true;
 #endif
         }
         else if (propertyName == "Alpha")
