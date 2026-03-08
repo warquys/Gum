@@ -1,17 +1,9 @@
-﻿using Apos.Shapes;
-using Gum;
+﻿using System.Numerics;
+using Apos.Shapes;
 using Gum.Converters;
 using Gum.DataTypes;
-using Microsoft.Xna.Framework;
 using RenderingLibrary;
 using RenderingLibrary.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Color = Microsoft.Xna.Framework.Color;
 
 namespace MonoGameAndGum.Renderables;
@@ -518,7 +510,10 @@ public abstract class RenderableShapeBase : RenderableBase
                 "ShapeRenderer is null - did you remember to call ShapeRenderer.Self.Initialize()? " +
                 "For more information see documentation: https://docs.flatredball.com/gum/code/standard-visuals/shapes-apos.shapes#monogame");
         }
-        sb.Begin();
+        // Preserve the current RasterizerState so that scissor clipping
+        // (e.g. from a ScrollViewer) is respected by the shape batch.
+        var rasterizerState = sb.GraphicsDevice.RasterizerState;
+        sb.Begin(rasterizerState: rasterizerState);
     }
 
     public override void EndBatch(ISystemManagers systemManagers)

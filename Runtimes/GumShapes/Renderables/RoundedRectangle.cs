@@ -4,6 +4,7 @@ using RenderingLibrary.Math;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ public class RoundedRectangle : RenderableShapeBase
         var absoluteLeft = this.GetAbsoluteLeft();
         var absoluteTop = this.GetAbsoluteTop();
 
-        var size = new Microsoft.Xna.Framework.Vector2(Width, Height);
+        var size = new Vector2(Width, Height);
 
         if(HasDropshadow)
         {
@@ -49,7 +50,7 @@ public class RoundedRectangle : RenderableShapeBase
         float strokeWidth,
         Color? forcedColor = null)
     {
-        var position = new Microsoft.Xna.Framework.Vector2(absoluteLeft, absoluteTop);
+        var position = new Vector2(absoluteLeft, absoluteTop);
 
         int thickness = 1;
 

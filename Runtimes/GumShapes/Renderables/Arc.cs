@@ -4,6 +4,7 @@ using RenderingLibrary.Math;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -52,7 +53,7 @@ internal class Arc : RenderableShapeBase
         var absoluteLeft = this.GetAbsoluteLeft();
         var absoluteTop = this.GetAbsoluteTop();
 
-        var center = new Microsoft.Xna.Framework.Vector2(
+        var center = new Vector2(
             absoluteLeft + Width / 2.0f,
             absoluteTop + Width / 2.0f);
 

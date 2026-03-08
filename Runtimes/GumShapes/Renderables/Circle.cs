@@ -5,6 +5,7 @@ using RenderingLibrary.Math;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,7 +20,7 @@ public class Circle : RenderableShapeBase
         var absoluteLeft = this.GetAbsoluteLeft();
         var absoluteTop = this.GetAbsoluteTop();
 
-        var center = new Microsoft.Xna.Framework.Vector2(
+        var center = new Vector2(
             absoluteLeft + Width / 2.0f,
             absoluteTop + Width / 2.0f);
 
@@ -46,7 +47,7 @@ public class Circle : RenderableShapeBase
     private void RenderInternal(ShapeBatch sb, 
         float absoluteLeft, 
         float absoluteTop, 
-        Microsoft.Xna.Framework.Vector2 center, 
+        Vector2 center, 
         float radius,
         int antiAliasSize,
         float strokeWidth,
